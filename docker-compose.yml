@@ -1,0 +1,40 @@
+services:
+  ocsv:
+    container_name: ocsv
+    build:
+      context: .
+      dockerfile: Dockerfile
+    devices:
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./ocserv:/etc/ocserv:rw
+    env_file: .env
+    stop_grace_period: 0s
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.ocsv.rule=HostSNI(`${OCSV_DOMAIN}`)
+      - traefik.tcp.routers.ocsv.entrypoints=websecure
+      - traefik.tcp.routers.ocsv.tls=true
+      - traefik.tcp.routers.ocsv.tls.passthrough=true
+      - traefik.tcp.routers.ocsv.tls.certresolver=cloudflare
+      - traefik.tcp.routers.ocsv.service=ocsv
+      - traefik.tcp.services.ocsv.loadbalancer.server.port=443
+
+  certdumper:
+    image: humenius/traefik-certs-dumper
+    network_mode: none
+    command: --restart-containers ocsv
+    volumes:
+      - /root/docker-setups/traefik/certs/cloudflare-acme.json:/traefik/acme.json:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./ocserv/certs:/output:rw
+    environment:
+      - DOMAIN=${OCSV_DOMAIN}
+    stop_grace_period: 0s
+
+networks:
+  default:
+    name: web
+    external: true
