@@ -11,6 +11,7 @@ services:
     volumes:
       - ./ocserv:/etc/ocserv:rw
     env_file: .env
+    restart: always
     stop_grace_period: 0s
     labels:
       - traefik.enable=true
@@ -37,6 +38,7 @@ services:
       - ./ocserv/certs:/output:rw
     environment:
       - DOMAIN=${OCSV_DOMAIN}
+    restart: always
     stop_grace_period: 0s
 
 networks:
