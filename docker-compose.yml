@@ -21,6 +21,11 @@ services:
       - traefik.tcp.routers.ocsv.tls.certresolver=cloudflare
       - traefik.tcp.routers.ocsv.service=ocsv
       - traefik.tcp.services.ocsv.loadbalancer.server.port=443
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
 
   certdumper:
     image: humenius/traefik-certs-dumper
