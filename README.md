@@ -6,7 +6,7 @@ OpenConnect uses TLS for encrypting traffic. Using TLS makes this VPN a low prof
 ## Prerequisites
 - A Linux server.
 - Docker knowledge + installed Docker + Docker Compose plugin.
-- Traefik knowledge + Traefik running on the external Docker network named `web`. Traefik should be able to work with labels of other containers and generate certificates according to those labels.
+- Traefik knowledge + Traefik running on the external Docker network named `web`. Network `web` should have IPv6 support if IPv6 is needed. Traefik should be able to work with labels of other containers and generate certificates according to those labels.
 
 ## How to run it?
 - In the repository root create `.env` file. It should contain one string: `OCSV_DOMAIN=your-vpn-server-domain.com`
@@ -21,4 +21,4 @@ docker exec -it ocsv ocpasswd -c /etc/ocserv/passwd exampleloginname
 - Connect with any OpenConnect or Cisco AnyConnect client to your server. Endpoint address will be your `OCSV_DOMAIN`, login `exampleloginname` and password is the password that was set on the previous step.
 
 ## Notes
-- By default the server uses `10.14.0.0/24` pool to give out addresses. If you need a different pool, change it in `entrypoint.sh` and `ocserv.conf`.
+- By default the server uses `10.14.0.0/24` and `fda9:4efe:7e3b:03ea::/48` pools to give out addresses. If you need a different pool, change it in `entrypoint.sh` and `ocserv.conf`.
