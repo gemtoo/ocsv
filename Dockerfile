@@ -1,12 +1,12 @@
-FROM debian:bookworm-slim
+FROM fedora:latest
 
-RUN apt update && \
-    apt upgrade -y && \
-    apt install --no-install-recommends -y \
-    ca-certificates \
-    net-tools \
-    iptables \
-    ocserv
+RUN dnf update -y && \
+    dnf install -y ocserv ca-certificates iptables && \
+    dnf clean all && \
+    mkdir -p /var/lib/ocserv/run && \
+    chmod 755 /var/lib/ocserv/run && \
+    chown ocserv:ocserv /var/lib/ocserv/run
+
 
 WORKDIR /
 COPY entrypoint.sh .
