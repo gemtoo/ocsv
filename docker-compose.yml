@@ -23,7 +23,7 @@ services:
       - traefik.tcp.routers.ocsv.entrypoints=websecure
       - traefik.tcp.routers.ocsv.tls=true
       - traefik.tcp.routers.ocsv.tls.passthrough=true
-      - traefik.tcp.routers.ocsv.tls.certresolver=cloudflare
+      - traefik.tcp.routers.ocsv.tls.certresolver=letsencrypt
       - traefik.tcp.routers.ocsv.service=ocsv
       - traefik.tcp.services.ocsv.loadbalancer.server.port=443
     logging:
@@ -37,7 +37,7 @@ services:
     network_mode: none
     command: --restart-containers ocsv
     volumes:
-      - /root/docker-setups/traefik/certs/cloudflare-acme.json:/traefik/acme.json:ro
+      - /root/docker-setups/traefik/certs/acme.json:/traefik/acme.json:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./ocserv/certs:/output:rw
     environment:
