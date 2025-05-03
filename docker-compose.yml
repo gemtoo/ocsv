@@ -18,14 +18,14 @@ services:
     restart: always
     stop_grace_period: 0s
     labels:
-      - traefik.enable=true
-      - traefik.tcp.routers.ocsv.rule=HostSNI(`${OCSV_DOMAIN}`)
-      - traefik.tcp.routers.ocsv.entrypoints=websecure
-      - traefik.tcp.routers.ocsv.tls=true
-      - traefik.tcp.routers.ocsv.tls.passthrough=true
-      - traefik.tcp.routers.ocsv.tls.certresolver=letsencrypt
-      - traefik.tcp.routers.ocsv.service=ocsv
-      - traefik.tcp.services.ocsv.loadbalancer.server.port=443
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.ocsv.rule=HostSNI(`${OCSV_DOMAIN}`)"
+      - "traefik.tcp.routers.ocsv.entrypoints=websecure"
+      - "traefik.tcp.routers.ocsv.tls=true"
+      - "traefik.tcp.routers.ocsv.tls.passthrough=true"
+      - "traefik.tcp.routers.ocsv.tls.certresolver=letsencrypt"
+      - "traefik.tcp.routers.ocsv.service=ocsv"
+      - "traefik.tcp.services.ocsv.loadbalancer.server.port=443"
     logging:
       driver: "json-file"
       options:
