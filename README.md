@@ -20,5 +20,25 @@ docker exec -it ocsv ocpasswd -c /etc/ocserv/passwd exampleloginname
 ```
 - Connect with any OpenConnect or Cisco AnyConnect client to your server. Endpoint address will be your `OCSV_DOMAIN`, login `exampleloginname` and password is the password that was set on the previous step.
 
+## VPN router Debian setup
+1. To avoid wrapping LAN traffic into VPN, in config-per-user exclude routes to your LAN's prefix with no-route:
+```
+no-route = 10.1.0.0/16
+no-route = 2a02:220e:2001:bb00::/56
+```
+2. Setup IPv4/IPv6 forwarding:
+```
+echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/99-openconnect-router.conf
+echo 'net.ipv6.conf.all.forwarding = 1' >> /etc/sysctl.d/99-openconnect-router.conf
+sysctl -p /etc/sysctl.d/99-openconnect-router.conf
+```
+3. Setup NAT and persistence:
+```
+iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+ip6tables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+apt install -y iptables-persistent
+```
+When installing iptables-persistence you'll be prompted to save IPv4 settings, then to save IPv6 settings, save them both.
+
 ## Notes
-- By default the server uses `10.14.0.0/24` and `fda9:4efe:7e3b:03ea::/48` pools to give out addresses. If you need a different pool, change it in `entrypoint.sh` and `ocserv.conf`.
+- By default the server uses `10.14.0.0/24` and `fd0e:1ced:c0ff:ee::/48` pools to give out addresses. If you need a different pool, change it in `entrypoint.sh` and `ocserv.conf`.
