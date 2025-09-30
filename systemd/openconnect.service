@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenConnect VPN Client
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/openconnect --no-dtls --user=openconnect_user_name --passwd-on-stdin endpoint-example.com
+ExecStop=/usr/bin/pkill -SIGINT openconnect
+Restart=on-failure
+RestartSec=5
+StandardInput=file:/etc/openconnect/password.txt
+
+[Install]
+WantedBy=multi-user.target

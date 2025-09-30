@@ -1,3 +1,8 @@
 route = 192.0.2.5/24
 route = 203.0.113.0/24
 route = 2001:db8::/32
+explicit-ipv4 = 10.14.0.16
+explicit-ipv6 = fd14:1ced:c0ff:eeee::16
+no-route = 10.1.0.0/16
+no-route = 2a02:220e:2001:bb00::/56
+no-route = fd03::/64
